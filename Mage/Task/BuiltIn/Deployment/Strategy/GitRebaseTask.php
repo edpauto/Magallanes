@@ -53,8 +53,10 @@ class GitRebaseTask extends BaseStrategyTaskAbstract implements IsReleaseAware
         $result = $this->runCommandRemote($command);
 
         if ($result === false) {
-            $repository = $this->getConfig()->deployment('repository');
-            if ($repository) {
+            $scmConfig = $this->getConfig()->deployment('scm');
+            if (isset($scmConfig['source'])) {
+                $repository = $scmConfig['source'];
+
                 $command = $this->getReleasesAwareCommand('git clone ' . $repository . ' .');
                 $result = $this->runCommandRemote($command);
 
